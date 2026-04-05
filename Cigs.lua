@@ -514,7 +514,7 @@ Tool.Equipped:Connect(function()
 
 			hasZig     = true
 			numberLeft = numberLeft - 1
-			Tool.Name  = "Cigarette - "
+			Tool.Name  = "Cigarette"
 			print("Zigareten left: "..numberLeft)
 
 			heat    = 0
