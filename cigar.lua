@@ -118,7 +118,7 @@ local function Linear(X) return X / 90 end
 
 -- ── Arm pose CFrames (same values as original cigarette script) ───────
 local LeftValue2 = CF(-1.33,-0.14, 0.3 ) * CFAN(RAD(  7.261), RAD(-54.019), RAD( 14.367))
-local LeftValue3 = CF(-0.84, 0.58,-0.71) * CFAN(RAD(-77.331), RAD(-163.091),RAD(-108.349))
+local LeftValue3 = CF(-0.84, 0.58,-1) * CFAN(RAD(-77.331), RAD(-163.091),RAD(-123.349))
 local RightValue2 = CF( 1.1, 0.74,-0.81) * CFAN(RAD(-75.651), RAD(-158.195), RAD(115.249))
 local RightValue4 = CF( 1.45,-0.04,-0.13)* CFAN(RAD(-10.373), RAD(  -6.056), RAD(  0.231))
 
