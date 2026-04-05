@@ -272,6 +272,21 @@ local function buildPack()
 	d.Texture     = "rbxassetid://1688752118"
 	d.Face        = Enum.NormalId.Front
 	d.Parent      = p
+	local d2 = d:Clone()
+	d2.Face = Enum.NormalId.Back
+	d2.Parent = p
+	d2 = d:Clone()
+	d2.Face = Enum.NormalId.Right
+	d2.Parent = p
+	d2 = d:Clone()
+	d2.Face = Enum.NormalId.Left
+	d2.Parent = p
+	d2 = d:Clone()
+	d2.Face = Enum.NormalId.Top
+	d2.Parent = p
+	d2 = d:Clone()
+	d2.Face = Enum.NormalId.Bottom
+	d2.Parent = p
 	return p
 end
 
