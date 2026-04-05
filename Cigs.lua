@@ -447,8 +447,8 @@ end
 --  BUILD TOOL
 -- ═════════════════════════════════════════════════════════════════════
 local Tool          = Instance.new("Tool")
-Tool.Name           = "Ernte - 20/20"
-Tool.ToolTip        = "Ernte 20/20"
+Tool.Name           = "Cig Pack - 20/20"
+Tool.ToolTip        = "Just Smoke it."
 Tool.RequiresHandle = true
 Tool.CanBeDropped   = false
 
@@ -514,7 +514,7 @@ Tool.Equipped:Connect(function()
 
 			hasZig     = true
 			numberLeft = numberLeft - 1
-			Tool.Name  = "Izzurba - "..numberLeft.."/20"
+			Tool.Name  = "Cigarette - "
 			print("Zigareten left: "..numberLeft)
 
 			heat    = 0
@@ -765,6 +765,7 @@ Tool.Unequipped:Connect(function()
 		local oldZig = currentZig
 		oldZig.Paper.CanCollide = true
 		restoreShoulders()
+		Tool.Name  = "Cig Pack - "..numberLeft.."/20"
 		local pa = rArm:FindFirstChild("Paper")
 		if pa then pa:Destroy() end
 		fizzleZig(oldZig, 5)
