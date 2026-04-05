@@ -331,6 +331,10 @@ local Zigarette = {
                 	body.Material = Enum.Material.Metal
                 	body.CanCollide = false
                 	body.Parent = lighter
+                    local sound = Instance.new("Sound", body)
+	                sound.SoundId = "rbxassetid://379973323"
+	                sound.Name= "Sound"
+
                 
                 	local lid = makePart("lid", VEC3(0.167, 0.214, 0.381), "Medium stone grey", "Metal", 0)
                 	lid.Parent = lighter
@@ -615,7 +619,7 @@ local Zigarette = {
                 			task.wait(0.5*1.2)
                 
                 			-- Lighter ignites
-                			local lSnd = lighterBody:FindFirstChild("Sound")
+                			local lSnd = lighterClone.Union:FindFirstChild("Sound")
                 			if lSnd then lSnd:Play() end
                 			task.wait(0.1)
                 
@@ -1117,7 +1121,10 @@ local Zigarette = {
                     body.Material = Enum.Material.Metal
                     body.CanCollide = false
                     body.Parent = lighter
-
+                    local sound = Instance.new("Sound", body)
+	                sound.SoundId = "rbxassetid://379973323"
+	                sound.Name= "Sound"
+        
                     local lid = makePart("lid", VEC3(0.167, 0.214, 0.381), "Medium stone grey", "Metal", 0)
                     lid.Parent = lighter
                     attachWeld(lid, body, CF(0, 0.11, -0.45)*CFAN(RAD(45),0,0))
@@ -1376,7 +1383,7 @@ local Zigarette = {
                             task.wait(0.6)
 
                             -- Lighter ignites
-                            local lSnd = lighterBody:FindFirstChild("Sound")
+                            local lSnd = lighterClone.Union:FindFirstChild("Sound")
                             if lSnd then lSnd:Play() end
                             task.wait(0.1)
 
@@ -1884,6 +1891,9 @@ local Zigarette = {
                     body.Material = Enum.Material.Metal
                     body.CanCollide = false
                     body.Parent = lighter
+                    local sound = Instance.new("Sound", body)
+	                sound.SoundId = "rbxassetid://379973323"
+	                sound.Name= "Sound"
 
                     local lid = makePart("lid", VEC3(0.167, 0.214, 0.381), "Medium stone grey", "Metal", 0)
                     lid.Parent = lighter
@@ -2102,7 +2112,7 @@ local Zigarette = {
                             TweenJoint(lWeld, LeftValue3, CF(0,0,0), Linear, 0.5)
                             task.wait(0.6)
                             task.wait(math.huge)
-                            local lSnd = lighterBody:FindFirstChild("Sound")
+                            local lSnd = lighterClone.Union:FindFirstChild("Sound")
                             if lSnd then lSnd:Play() end
                             task.wait(0.1)
 
