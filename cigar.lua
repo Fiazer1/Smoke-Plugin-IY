@@ -647,17 +647,43 @@ Tool.Equipped:Connect(function()
 					end
 
 					-- ── Cigar is finished — throw it ─────────────────
+					-- ── Cigar is finished — throw it ─────────────────
 					if size <= minSize then
+						ready = false; isLit = false
+
+						TweenJoint(rWeld,
+							CF(1.3, 0.6, -0.7) * CFAN(RAD(75), RAD(10), RAD(-15)),
+							CF(0, 0, 0), Linear, 0.15)
+
+						task.wait(0.15) -- full tween plays, cigar still attached
+
+						hasCigar = false
+
 						cigarWeld:Destroy()
 						cigRef.Parent = workspace
-						hasCigar = false; ready = false; isLit = false
+						cigRef.Paper.CanCollide = true
+
+						local root = Char:FindFirstChild("HumanoidRootPart") or Torso
+						local throwDir = (
+							root.CFrame.LookVector +
+								root.CFrame.RightVector * 0.45 +
+								Vector3.new(0, 0.25, 0)
+						).Unit
+						cigRef.Paper.AssemblyLinearVelocity  = throwDir * 30
+						cigRef.Paper.AssemblyAngularVelocity = Vector3.new(
+							math.random(-22, 22),
+							math.random(-22, 22),
+							math.random(-22, 22)
+						)
+
 						cigRef.Paper.Crackle:Stop()
 						cigarAnchor:Destroy()
 
+						task.wait(0.22)
 						TweenJoint(rWeld, RightValue4, CF(0,0,0), Linear, 0.5)
-
-						-- Cherry fizzles out naturally after hitting the ground
 						fizzleCigar(cigRef, 5)
+						-- ... rest unchanged
+						-- ... rest unchanged
 						task.delay(25, function()
 							if cigRef and cigRef.Parent then cigRef:Destroy() end
 						end)
@@ -717,7 +743,7 @@ Tool.Equipped:Connect(function()
 					task.spawn(function()
 						task.wait(2.5)
 						puff.Enabled = false
-						task.wait(6)
+						task.wait(1)
 						at:Destroy()
 						reloadVal.Value = false
 					end)
@@ -750,25 +776,52 @@ end)
 --  UNEQUIP — drop the cigar if unequipped while still smoking
 -- ═════════════════════════════════════════════════════════════════════
 Tool.Unequipped:Connect(function()
-	Selected = false
 	if activatedConn then activatedConn:Disconnect(); activatedConn = nil end
 
 	if hasCigar then
-		currentCigar.Parent = workspace
 		hasCigar = false; ready = false; pulling = false; drawing = false; isLit = false
 		currentCigar.Paper.Crackle:Stop()
 		local oldCig = currentCigar
+
+		TweenJoint(rWeld,
+			CF(1.3, 0.6, -0.7) * CFAN(RAD(75), RAD(10), RAD(-35)),
+			CF(0, 0, 0), Linear, 0.15)
+
+		task.wait(0.15) -- full animation before releasing
+
+		if currentWeld then currentWeld:Destroy(); currentWeld = nil end
+		oldCig.Parent = workspace
 		oldCig.Paper.CanCollide = true
-		restoreShoulders()
+
+		local root = Char:FindFirstChild("HumanoidRootPart") or Torso
+		local throwDir = (
+			root.CFrame.LookVector +
+				root.CFrame.RightVector * 0.45 +
+				Vector3.new(0, 0.25, 0)
+		).Unit
+		oldCig.Paper.AssemblyLinearVelocity  = throwDir * 30
+		oldCig.Paper.AssemblyAngularVelocity = Vector3.new(
+			math.random(-22, 22),
+			math.random(-22, 22),
+			math.random(-22, 22)
+		)
+
+		Selected = false
+
 		local pa = rArm:FindFirstChild("Paper")
 		if pa then pa:Destroy() end
+
 		fizzleCigar(oldCig, 5)
+		setupTouchStub(oldCig)
 		Tool:Destroy()
 		task.delay(10, function()
 			if oldCig and oldCig.Parent then oldCig:Destroy() end
 		end)
-		setupTouchStub(oldCig)
+
+		task.wait(0.22)
+		restoreShoulders()
 	else
+		Selected = false
 		restoreShoulders()
 	end
 end)
