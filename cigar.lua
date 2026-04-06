@@ -428,7 +428,7 @@ local function setupTouchStub(oldCig)
 	local paper = oldCig:FindFirstChild("Paper")
 	if not paper then return end
 	paper.Touched:Connect(function(hit)
-		if (hit.Name == "Left Leg" or hit.Name == "Right Leg")
+		if (hit.Name == "Left Leg" or hit.Name == "Right Leg") then
 			paper.Anchored = true
 			and not oldCig.Fizzled.Value then
 			oldCig.Fizzled.Value = true
