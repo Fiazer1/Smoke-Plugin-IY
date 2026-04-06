@@ -8,11 +8,6 @@
 local Players      = game:GetService("Players")
 local RunService   = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
-local PhysicsService = game:GetService("PhysicsService")
-
-PhysicsService:RegisterCollisionGroup("DroppedCigar")
-PhysicsService:CollisionGroupSetCollidable("DroppedCigar", "Default", true)   -- lands on ground
-PhysicsService:CollisionGroupSetCollidable("DroppedCigar", "Players", false)  -- legs don't kick it
 
 local LP   = Players.LocalPlayer
 local Char = LP.Character or LP.CharacterAdded:Wait()
@@ -434,6 +429,7 @@ local function setupTouchStub(oldCig)
 	if not paper then return end
 	paper.Touched:Connect(function(hit)
 		if (hit.Name == "Left Leg" or hit.Name == "Right Leg")
+			paper.Anchored = true
 			and not oldCig.Fizzled.Value then
 			oldCig.Fizzled.Value = true
 			local s = paper:FindFirstChild("Sound")
@@ -480,11 +476,6 @@ Tool.Equipped:Connect(function()
 	isLit    = false
 	size     = 5000
 
-	 for _, part in ipairs(Char:GetDescendants()) do
-	     if part:IsA("BasePart") then
-	         part.CollisionGroup = "Players"
-	     end
-	end
 	-- Replace Motor6Ds with local Welds for full arm control
 	lWeld        = Instance.new("Weld")
 	lWeld.Name   = "lWeld"
@@ -685,7 +676,6 @@ Tool.Equipped:Connect(function()
 							math.random(-22, 22),
 							math.random(-22, 22)
 						)
-						cigRef.Paper.CollisionGroup = "DroppedCigar"
 
 						cigRef.Paper.Crackle:Stop()
 						cigarAnchor:Destroy()
@@ -816,7 +806,6 @@ Tool.Unequipped:Connect(function()
 			math.random(-22, 22),
 			math.random(-22, 22)
 		)
-		cigRef.Paper.CollisionGroup = "DroppedCigar"
 
 		Selected = false
 
