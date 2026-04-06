@@ -591,7 +591,7 @@ Tool.Equipped:Connect(function()
 					task.spawn(function()
 						task.wait(2.5)
 						puff.Enabled = false
-						task.wait(6)
+						task.wait(1)
 						at:Destroy()
 						reloadVal.Value = false
 					end)
