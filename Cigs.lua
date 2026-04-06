@@ -272,21 +272,6 @@ local function buildPack()
 	d.Texture     = "rbxassetid://1688752118"
 	d.Face        = Enum.NormalId.Front
 	d.Parent      = p
-	local d2 = d:Clone()
-	d2.Face = Enum.NormalId.Back
-	d2.Parent = p
-	d2 = d:Clone()
-	d2.Face = Enum.NormalId.Right
-	d2.Parent = p
-	d2 = d:Clone()
-	d2.Face = Enum.NormalId.Left
-	d2.Parent = p
-	d2 = d:Clone()
-	d2.Face = Enum.NormalId.Top
-	d2.Parent = p
-	d2 = d:Clone()
-	d2.Face = Enum.NormalId.Bottom
-	d2.Parent = p
 	return p
 end
 
@@ -462,8 +447,8 @@ end
 --  BUILD TOOL
 -- ═════════════════════════════════════════════════════════════════════
 local Tool          = Instance.new("Tool")
-Tool.Name           = "Cig Pack - 20/20"
-Tool.ToolTip        = "Just Smoke it."
+Tool.Name           = "Ernte - 20/20"
+Tool.ToolTip        = "Ernte 20/20"
 Tool.RequiresHandle = true
 Tool.CanBeDropped   = false
 
@@ -529,7 +514,7 @@ Tool.Equipped:Connect(function()
 
 			hasZig     = true
 			numberLeft = numberLeft - 1
-			Tool.Name  = "Cigarette"
+			Tool.Name  = "Izzurba - "..numberLeft.."/20"
 			print("Zigareten left: "..numberLeft)
 
 			heat    = 0
@@ -661,13 +646,36 @@ Tool.Equipped:Connect(function()
 
 					if size <= minSize then
 						-- Burned to the filter
+						ready = false -- keep hasZig alive so TweenJoint doesn't bail
+
+						TweenJoint(rWeld,
+							CF(1.3, 0.6, -0.7) * CFAN(RAD(75), RAD(10), RAD(-35)),
+							CF(0, 0, 0), Linear, 0.15)
+
+						task.wait(0.15) -- full animation plays with zig still attached
+
+						hasZig = false
 						zigWeld:Destroy()
 						zigClone.Parent = workspace
-						hasZig = false
-						ready  = false
+						zigClone.Paper.CanCollide = true
+
+						local root = Char:FindFirstChild("HumanoidRootPart") or Torso
+						local throwDir = (
+							root.CFrame.LookVector +
+								root.CFrame.RightVector * 0.45 +
+								Vector3.new(0, 0.25, 0)
+						).Unit
+						zigClone.Paper.AssemblyLinearVelocity  = throwDir * 30
+						zigClone.Paper.AssemblyAngularVelocity = Vector3.new(
+							math.random(-22, 22),
+							math.random(-22, 22),
+							math.random(-22, 22)
+						)
+
 						zigClone.Paper.Crackle:Stop()
 						zigAnchor:Destroy()
 
+						task.wait(0.22)
 						TweenJoint(rWeld, RightValue4, CF(0,0,0), Linear, 0.5*1)
 
 						local oldZig = zigClone
@@ -748,7 +756,7 @@ Tool.Equipped:Connect(function()
 					task.spawn(function()
 						task.wait(2)
 						puff.Enabled = false
-						task.wait(6)
+						task.wait(1)
 						at:Destroy()
 						reloadVal.Value = false
 					end)
@@ -770,23 +778,51 @@ end)
 --  UNEQUIP
 -- ═════════════════════════════════════════════════════════════════════
 Tool.Unequipped:Connect(function()
-	Selected = false
 	if activatedConn then activatedConn:Disconnect(); activatedConn = nil end
 
 	if hasZig then
-		currentZig.Parent = workspace
+		-- Don't set Selected = false yet, TweenJoint needs it
 		hasZig = false; ready = false; pulling = false; drawing = false
 		currentZig.Paper.Crackle:Stop()
 		local oldZig = currentZig
+
+		TweenJoint(rWeld,
+			CF(1.3, 0.6, -0.7) * CFAN(RAD(75), RAD(10), RAD(-35)),
+			CF(0, 0, 0), Linear, 0.15)
+
+		task.wait(0.15) -- full animation before releasing
+
+		if currentWeld then currentWeld:Destroy(); currentWeld = nil end
+		oldZig.Parent = workspace
 		oldZig.Paper.CanCollide = true
-		restoreShoulders()
-		Tool.Name  = "Cig Pack - "..numberLeft.."/20"
+
+		local root = Char:FindFirstChild("HumanoidRootPart") or Torso
+		local throwDir = (
+			root.CFrame.LookVector +
+				root.CFrame.RightVector * 0.45 +
+				Vector3.new(0, 0.25, 0)
+		).Unit
+		oldZig.Paper.AssemblyLinearVelocity  = throwDir * 30
+		oldZig.Paper.AssemblyAngularVelocity = Vector3.new(
+			math.random(-22, 22),
+			math.random(-22, 22),
+			math.random(-22, 22)
+		)
+
+		Selected = false -- safe to flip now
+
+		Tool.Name = "Cig Pack - "..numberLeft.."/20"
 		local pa = rArm:FindFirstChild("Paper")
 		if pa then pa:Destroy() end
+
 		fizzleZig(oldZig, 5)
-		task.delay(10, function() if oldZig and oldZig.Parent then oldZig:Destroy() end end)
 		setupTouchStub(oldZig)
+		task.delay(10, function() if oldZig and oldZig.Parent then oldZig:Destroy() end end)
+
+		task.wait(0.22)
+		restoreShoulders()
 	else
+		Selected = false
 		if packClone then packClone.Parent = nil end
 		restoreShoulders()
 	end
